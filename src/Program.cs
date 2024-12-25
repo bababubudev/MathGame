@@ -88,7 +88,19 @@ static async Task<int?> GetUserResponseByDifficulty(DifficultyLevel difficulty)
         if (Console.KeyAvailable)
         {
           var keyInfo = Console.ReadKey(intercept: true);
+
           if (keyInfo.Key == ConsoleKey.Enter) { break; }
+          else if (keyInfo.Key == ConsoleKey.Backspace && input.Length > 0)
+          {
+            input = input[..^1];
+            Console.Write("\b \b");
+          }
+          else if (char.IsControl(keyInfo.KeyChar))
+          {
+            input += keyInfo.KeyChar;
+            Console.Write(keyInfo.KeyChar);
+          }
+
           input += keyInfo.KeyChar;
           Console.Write(keyInfo.KeyChar);
         }
@@ -104,7 +116,7 @@ static async Task<int?> GetUserResponseByDifficulty(DifficultyLevel difficulty)
 
     if (int.TryParse(result, out response))
     {
-      Console.WriteLine($"\nTime taken to answer: {stopwatch.Elapsed.ToString(@"m\:ss\.fff")}");
+      Console.WriteLine($"\n\nTime taken to answer: {stopwatch.Elapsed.ToString(@"m\:ss\.fff")}");
       return response;
     }
     else
@@ -121,11 +133,25 @@ static async Task<int?> GetUserResponseByDifficulty(DifficultyLevel difficulty)
   }
 }
 
-static int ValidateResult(int result, int? userResponse, int score)
+static int CalculateScore(int basePoints, TimeSpan timeTaken, DifficultyLevel difficulty)
 {
-  int incrementScore = 5;
+  /* Hard = 1.0, Medium = 2.0, Easy = 3.0 */
+  double difficultyMultiplier = (double)difficulty / 15.0;
 
-  if (userResponse == null)
+  int maxBonus = 10;
+  double timeFactor = Math.Max(0, maxBonus - (timeTaken.TotalSeconds * (maxBonus / (double)difficulty)));
+  int bonusPoints = (int)(timeFactor * 1 / difficultyMultiplier);
+
+  Console.WriteLine($"timeFactor: {timeFactor}, bonusPoints: {bonusPoints}, multiplier: {difficultyMultiplier}");
+
+  return basePoints + bonusPoints;
+}
+
+static int ValidateResult(int result, int? userResponse, int score, DifficultyLevel difficulty, TimeSpan timeSpan)
+{
+  int basePoints = 5;
+
+  if (!userResponse.HasValue)
   {
     Console.WriteLine("You didn't provide an answer in time!\n");
     return score;
@@ -133,10 +159,11 @@ static int ValidateResult(int result, int? userResponse, int score)
 
   if (result == userResponse)
   {
+    var earnedPoints = CalculateScore(basePoints, timeSpan, difficulty);
     Console.WriteLine("Well done! You answered correctly");
-    Console.WriteLine($"You earned {incrementScore} points\n");
+    Console.WriteLine($"You earned {earnedPoints} points\n");
 
-    score += incrementScore;
+    score += earnedPoints;
   }
   else
   {
@@ -146,7 +173,7 @@ static int ValidateResult(int result, int? userResponse, int score)
   return score;
 }
 
-static async Task<int> PerformOperation(MathGameLogic mathGame, int firstNum, int secondNum, char operation, int score, DifficultyLevel difficultyLevel)
+static async Task<int> PerformOperation(MathGameLogic mathGame, int firstNum, int secondNum, char operation, int score, DifficultyLevel difficulty)
 {
   int result;
   int? userResponse;
@@ -154,8 +181,14 @@ static async Task<int> PerformOperation(MathGameLogic mathGame, int firstNum, in
   DisplayMathGameQuestions(firstNum, secondNum, operation);
 
   result = mathGame.MathOperation(firstNum, secondNum, operation);
-  userResponse = await GetUserResponseByDifficulty(difficultyLevel);
-  score += ValidateResult(result, userResponse, score);
+
+  Stopwatch stopwatch = new();
+  stopwatch.Start();
+
+  userResponse = await GetUserResponseByDifficulty(difficulty);
+  stopwatch.Stop();
+
+  score += ValidateResult(result, userResponse, score, difficulty, stopwatch.Elapsed);
 
   return score;
 }
