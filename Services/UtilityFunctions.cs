@@ -9,7 +9,7 @@ public static class Utility
     int selection = 0;
     while (!int.TryParse(Console.ReadLine(), out selection) || selection < min || selection > max)
     {
-      Console.WriteLine($"\nOnly numbers between {min} and {max} allowed!");
+      ColorConsole.WriteError($"\nOnly numbers between {min} and {max} allowed!");
       Console.Write("> ");
     }
 

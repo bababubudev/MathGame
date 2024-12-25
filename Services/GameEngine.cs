@@ -40,8 +40,8 @@ public class GameEngine
 
   private void ShowMenu(bool showScore = false)
   {
-    var scoreInfo = showScore ? $"\nScore [ {_gameState.Score} ]\n" : "\n";
-    Console.WriteLine($"{scoreInfo}Choose an option");
+    if (showScore) ColorConsole.WriteHighlight($"\nCurrent score: [ {_gameState.Score} ]");
+    Console.WriteLine($"Choose from the options: ");
     Console.WriteLine("[1] Addition");
     Console.WriteLine("[2] Subtraction");
     Console.WriteLine("[3] Multiplication");
@@ -88,7 +88,7 @@ public class GameEngine
 
       if (!userAnswer.HasValue)
       {
-        Console.WriteLine("\nTime's up!");
+        ColorConsole.WriteError("\nTime's up!");
         return;
       }
 
@@ -112,11 +112,11 @@ public class GameEngine
         scoreEarned = baseScore + bonusScore;
         _gameState.Score += scoreEarned;
 
-        Console.WriteLine($"\n\nCorrect! You answered it in [ {responseTime.TotalSeconds:F1}s ]\nYou earned [ {baseScore} ] points{bonusInfo}");
+        ColorConsole.WriteSuccess($"\n\nCorrect! You answered it in [ {responseTime.TotalSeconds:F1}s ]\nYou earned [ {baseScore} ] points{bonusInfo}");
       }
       else
       {
-        Console.WriteLine($"\n\nIncorrect! The answer was [ {correctAnswer} ]");
+        ColorConsole.WriteError($"\n\nIncorrect! The answer was [ {correctAnswer} ]");
       }
 
       _gameHistory.AddRound(new GameRound(
@@ -133,7 +133,7 @@ public class GameEngine
     }
     catch (Exception ex)
     {
-      Console.WriteLine($"\nAn error occured: {ex.Message}");
+      ColorConsole.WriteError($"\nAn error occured: {ex.Message}");
     }
   }
 
@@ -147,7 +147,7 @@ public class GameEngine
     {
       if (i > 0)
       {
-        Console.Write("\nPress ENTER for next question or type 'exit' to quit: ");
+        ColorConsole.WriteHighlight("\nPress ENTER for next question or type 'exit' to quit: ");
         var input = Console.ReadLine();
         if (input?.ToLower() == "exit") break;
       }
@@ -162,7 +162,7 @@ public class GameEngine
     var history = _gameHistory.GetHistory();
     if (history.Count == 0)
     {
-      Console.WriteLine("\nNo game history available.");
+      ColorConsole.WriteWarning("\nNo game history available.");
       return;
     }
 
@@ -193,13 +193,14 @@ public class GameEngine
       _ => _gameState.CurrentDifficulty
     };
 
-    Console.WriteLine($"\nDifficulty changed:[ {_gameState.CurrentDifficulty} ]");
+    ColorConsole.WriteSuccess($"\nDifficulty changed:[ {_gameState.CurrentDifficulty} ]");
   }
 
   private void EndGame()
   {
     _gameState.IsGameOver = true;
-    Console.WriteLine($"\nGame Over! \nFinal score: [ {_gameState.Score} ]\n");
+    ColorConsole.WriteHighlight($"\nFinal score: [ {_gameState.Score} ]");
+    ColorConsole.WriteWarning($"Game Over!");
   }
 
   private static void DisplayQuestion(int firstNum, int secondNum, string operation)
