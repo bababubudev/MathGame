@@ -7,9 +7,12 @@ var configuration = new ConfigurationBuilder()
   .Build();
 
 var gameHistory = new GameHistory();
+var statistics = new Statistics(gameHistory);
 var maxRange = ConfigurationBinder.GetValue<int?>(configuration, "GameSettings:MaxRange") ?? 30;
 
 ColorConsole.WriteHighlight("\n[ Welcome to the Math Game! ]\n");
 
 var gameEngine = new GameEngine(gameHistory, maxRange);
 await gameEngine.RunAsync();
+
+statistics.ShowStatistics();

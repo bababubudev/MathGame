@@ -123,6 +123,7 @@ public class GameEngine
         DateTime.Now,
         responseTime,
         operation.Symbol,
+        operation.Name,
         isCorrect,
         firstNum,
         secondNum,
@@ -199,8 +200,7 @@ public class GameEngine
   private void EndGame()
   {
     _gameState.IsGameOver = true;
-    ColorConsole.WriteHighlight($"\nFinal score: [ {_gameState.Score} ]");
-    ColorConsole.WriteWarning($"Game Over!");
+    ColorConsole.WriteWarning($"\nGame Over!");
   }
 
   private static void DisplayQuestion(int firstNum, int secondNum, string operation)
