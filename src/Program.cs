@@ -34,9 +34,9 @@ static int GetMinRangeWithDifficulty(DifficultyLevel difficulty, int maxRange)
   };
 }
 
-static DifficultyLevel ChangeDifficulty()
+static DifficultyLevel ChangeDifficulty(DifficultyLevel currentDifficulty)
 {
-  Console.WriteLine("\nChoose a difficulty: ");
+  Console.WriteLine($"\nChoose a difficulty (current: {currentDifficulty}) ");
   Console.WriteLine("1. Easy");
   Console.WriteLine("2. Medium");
   Console.WriteLine("3. Hard");
@@ -286,7 +286,7 @@ while (!isGameOver)
 
       break;
     case 7:
-      currentDifficulty = ChangeDifficulty();
+      currentDifficulty = ChangeDifficulty(currentDifficulty);
       DifficultyLevel diffEnum = (DifficultyLevel)currentDifficulty;
       Enum.IsDefined<DifficultyLevel>(diffEnum);
       Console.WriteLine($"\nDifficulty changed: [ {currentDifficulty} ]\n");
