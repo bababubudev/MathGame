@@ -48,7 +48,7 @@ An advanced, interactive console-based mathematics game built in C# that helps u
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/bububabadev/MathGame.git
+git clone https://github.com/bababubudev/MathGame.git
 cd MathGame
 ```
 
