@@ -48,8 +48,8 @@ An advanced, interactive console-based mathematics game built in C# that helps u
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/math-game.git
-cd math-game
+git clone https://github.com/bububabadev/MathGame.git
+cd MathGame
 ```
 
 2. Install dependencies:
