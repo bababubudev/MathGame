@@ -12,6 +12,10 @@ An advanced, interactive console-based mathematics game built in C# that helps u
   - Division
   - Random mode (mix of all operations)
 
+<img src="https://github.com/user-attachments/assets/797807bf-6007-48e9-a625-6850a852cbad" width=500px />
+
+
+
 ### Difficulty System
 - Three difficulty levels with customizable settings:
   - Easy (45 seconds per question)
@@ -28,6 +32,8 @@ An advanced, interactive console-based mathematics game built in C# that helps u
   - Response time
   - Difficulty level
   - Speed multipliers
+ 
+<img src="https://github.com/user-attachments/assets/381f0e8d-f5c7-4b7c-8e8a-26c00224cec1" width=500px />
 
 ### Advanced Features
 - Comprehensive statistics tracking
@@ -35,6 +41,9 @@ An advanced, interactive console-based mathematics game built in C# that helps u
 - Real-time progress monitoring
 - Game history with detailed records
 - Configurable game settings via appsettings.json
+
+![image](https://github.com/user-attachments/assets/89a73636-2374-4ed9-8e31-bc66e3de4f9f)
+
 
 ## Technical Requirements
 
